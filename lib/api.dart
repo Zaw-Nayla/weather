@@ -2,17 +2,16 @@ import 'yahoormodel.dart';
 import 'package:http/http.dart' as http;
 
 class API {
-
   Future<GetwithLocation> getwithLocation(String location) async {
     Map<String, String> requestHeaders = {
       'Content-type': 'application/json',
       'Accept': 'application/json',
       'x-rapidapi-host': 'yahoo-weather5.p.rapidapi.com',
-      'x-rapidapi-key': '5117292c9amsh9cf6be03522c809p178e3cjsnbb113cd3b645',
+      'x-rapidapi-key': 'ec3d600c8amshdc20236ecb5eb1dp148e76jsn1477b4f1c149',
     };
 
     var url = Uri.parse(
-        'https://yahoo-weather5.p.rapidapi.com/weather?location=$location&format=json&u=f');
+        'https://yahoo-weather5.p.rapidapi.com/weather?location=$location');
 
     http.Response response = await http.get(url, headers: requestHeaders);
     print(response.statusCode);
@@ -30,7 +29,7 @@ class API {
       'Content-type': 'application/json',
       'Accept': 'application/json',
       'x-rapidapi-host': 'yahoo-weather5.p.rapidapi.com',
-      'x-rapidapi-key': '5117292c9amsh9cf6be03522c809p178e3cjsnbb113cd3b645',
+      'x-rapidapi-key': 'ec3d600c8amshdc20236ecb5eb1dp148e76jsn1477b4f1c149',
     };
 
     var url = Uri.parse(

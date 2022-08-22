@@ -4,6 +4,7 @@ import 'package:weather_api/locationapi.dart';
 import 'package:geolocator/geolocator.dart';
 import 'yahoormodel.dart';
 import 'package:form_field_validator/form_field_validator.dart';
+import 'package:dotted_line/dotted_line.dart';
 
 void main() {
   runApp(const MyApp());
@@ -45,36 +46,34 @@ class _MyHomePageState extends State<MyHomePage> {
   double? humidity;
   double? visibility;
   int? conditioncode;
+  List<Forecast> day = [];
   String? image;
+  var high;
+  var low;
   Position? myposition;
   bool submit = false;
 
-  constract() async {
-    await API().getwithCoord(lat, long).then((value) {
-      setState(() {
-        myplaceweather = value;
-        temperature = myplaceweather!.currentObservation.condition.temperature;
-        skycondition = myplaceweather!.currentObservation.condition.text;
-        cityname = myplaceweather!.location.city;
-        conditioncode = myplaceweather!.currentObservation.condition.code;
-        humidity = myplaceweather!.currentObservation.atmosphere.humidity;
-        visibility = myplaceweather!.currentObservation.atmosphere.visibility;
-        imageInsert(conditioncode!);
-      });
-    });
-
-    API().getwithLocation(userinput.text).then((value) {
+  constract() {
+    API().getwithLocation('mogok').then((value) {
       setState(() {
         myweather = value;
         variableInsert();
         imageInsert(conditioncode!);
       });
     });
-  }
 
-  // locationconstract() {
-  //
-  // }
+    // API().getwithCoord(lat, long).then((value) {
+    //   myplaceweather = value;
+    // });
+    // temperature = myplaceweather!.currentObservation.condition.temperature;
+    // skycondition = myplaceweather!.currentObservation.condition.text;
+    // cityname = myplaceweather!.location.city;
+    // conditioncode = myplaceweather!.currentObservation.condition.code;
+    // humidity = myplaceweather!.currentObservation.atmosphere.humidity;
+    // visibility = myplaceweather!.currentObservation.atmosphere.visibility;
+    // // day = myplaceweather!.forecasts;
+    // imageInsert(conditioncode!);
+  }
 
   variableInsert() {
     setState(() {
@@ -84,6 +83,7 @@ class _MyHomePageState extends State<MyHomePage> {
       conditioncode = myweather!.currentObservation.condition.code;
       humidity = myweather!.currentObservation.atmosphere.humidity;
       visibility = myweather!.currentObservation.atmosphere.visibility;
+      day = myweather!.forecasts;
     });
   }
 
@@ -130,7 +130,6 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     constract();
-    // imageInsert(conditioncode!);
     userinput.addListener(() {
       setState(() {
         submit = userinput.text.isNotEmpty;
@@ -157,6 +156,9 @@ class _MyHomePageState extends State<MyHomePage> {
                     setState(() {
                       lat = myposition!.latitude;
                       long = myposition!.longitude;
+                      API().getwithCoord(lat, long).then((value) {
+                        myplaceweather = value;
+                      });
                       temperature = myplaceweather!
                           .currentObservation.condition.temperature;
                       skycondition =
@@ -168,6 +170,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           .currentObservation.atmosphere.humidity;
                       visibility = myplaceweather!
                           .currentObservation.atmosphere.visibility;
+                      day = myplaceweather!.forecasts;
                       imageInsert(conditioncode!);
                     });
                   },
@@ -199,13 +202,11 @@ class _MyHomePageState extends State<MyHomePage> {
                       stateClear();
                       myweather = await API().getwithLocation(value);
                       variableInsert();
-                      // print(conditioncode);
                       imageInsert(conditioncode!);
                       userinput.clear();
                     },
                     validator: RequiredValidator(errorText: 'Required'),
                     cursorColor: Colors.black,
-                    // autovalidateMode: submit ?AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
                     decoration: const InputDecoration(
                         border: InputBorder.none,
                         hintText: 'Search City',
@@ -222,10 +223,11 @@ class _MyHomePageState extends State<MyHomePage> {
                             stateClear();
                             myweather =
                                 await API().getwithLocation(userinput.text);
+                            userinput.clear();
                             variableInsert();
                             print(conditioncode);
                             imageInsert(conditioncode!);
-                            userinput.clear();
+                           
                           }
                         : null,
                     style: OutlinedButton.styleFrom(
@@ -246,149 +248,198 @@ class _MyHomePageState extends State<MyHomePage> {
                     ))
               ],
             )),
-        body: SingleChildScrollView(
-          child: Center(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: myplaceweather == null
-                  ? const Center(child: CircularProgressIndicator())
-                  : Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        body: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: myweather == null
+                ? const Center(child: CircularProgressIndicator())
+                : Column(
+                    children: [
+                      Container(
+                        height: MediaQuery.of(context).size.height * 0.46,
+                        width: MediaQuery.of(context).size.width,
+                        child: Column(
                           children: [
                             Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                const Icon(
-                                  Icons.location_on,
-                                  size: 18,
+                                Row(
+                                  children: [
+                                    Icon(
+                                      Icons.location_on,
+                                      size: 18,
+                                      color: temperature == null
+                                          ? Colors.white
+                                          : Colors.black,
+                                    ),
+                                    const SizedBox(
+                                      width: 2,
+                                    ),
+                                    Text(cityname == null ? '' : '$cityname',
+                                        style: const TextStyle(
+                                          fontFamily: 'Libre',
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 18,
+                                        )),
+                                  ],
                                 ),
-                                const SizedBox(
-                                  width: 2,
-                                ),
-                                Text(cityname == null ? '' : '$cityname',
-                                    style: const TextStyle(
-                                      fontFamily: 'Libre',
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 18,
-                                    )),
                               ],
                             ),
-                            TextButton(
-                                onPressed: () {
-                                  showBottomSheet(
-                                      context: context,
-                                      builder: (context) {
-                                        return Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            Column(),
-                                            Column(),
-                                            Column(),
-                                          ],
-                                        );
-                                      });
-                                },
-                                child: Text(cityname == null
-                                    ? ''
-                                    : ' Forcast for next three days > '))
-                          ],
-                        ),
-                        Text(
-                            '$temperature and $skycondition and $cityname and $conditioncode',
-                            style: const TextStyle(
-                              color: Colors.black,
-                            )),
-                        const SizedBox(
-                          height: 50,
-                        ),
-                        temperature == null
-                            ? const CircularProgressIndicator()
-                            : Column(
-                                children: [
-                                  Container(
-                                    height: 200,
-                                    width: 200,
-                                    decoration: BoxDecoration(
-                                      image: DecorationImage(
-                                          image:
-                                              AssetImage('images/$image.png')),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text(
-                                      '$skycondition',
-                                      style: const TextStyle(
-                                        fontFamily: 'Libre',
-                                        // fontWeight: FontWeight.bold,
-                                        fontSize: 30,
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    height: 20,
-                                  ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            temperature == null
+                                ? const CircularProgressIndicator()
+                                : Column(
                                     children: [
-                                      Column(
-                                        children: [
-                                          const Text(
-                                            'Temp',
-                                            style: TextStyle(
-                                                fontFamily: 'Oleo',
-                                                fontSize: 15),
-                                          ),
-                                          Text(
-                                            '$temperature',
-                                            style: const TextStyle(
-                                                fontFamily: 'Libre',
-                                                fontSize: 15),
-                                          )
-                                        ],
+                                      Container(
+                                        height: 200,
+                                        width: 200,
+                                        decoration: BoxDecoration(
+                                          image: DecorationImage(
+                                              image: AssetImage(
+                                                  'images/$image.png')),
+                                        ),
                                       ),
-                                      Column(
-                                        children: [
-                                          const Text(
-                                            'Humid',
-                                            style: TextStyle(
-                                                fontFamily: 'Oleo',
-                                                fontSize: 15),
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Text(
+                                          '$skycondition',
+                                          textAlign: TextAlign.center,
+                                          style: const TextStyle(
+                                            fontFamily: 'Libre',
+                                            // fontWeight: FontWeight.bold,
+                                            fontSize: 30,
                                           ),
-                                          Text(
-                                            '$humidity',
-                                            style: const TextStyle(
-                                                fontFamily: 'Libre',
-                                                fontSize: 15),
-                                          )
-                                        ],
+                                        ),
                                       ),
-                                      Column(
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceAround,
                                         children: [
-                                          const Text(
-                                            'Visibility',
-                                            style: TextStyle(
-                                                fontFamily: 'Oleo',
-                                                fontSize: 15),
+                                          Column(
+                                            children: [
+                                              const Text(
+                                                'Temp',
+                                                style: TextStyle(
+                                                    fontFamily: 'Oleo',
+                                                    fontSize: 15),
+                                              ),
+                                              Text(
+                                                '$temperature',
+                                                style: const TextStyle(
+                                                    fontFamily: 'Libre',
+                                                    fontSize: 15),
+                                              )
+                                            ],
                                           ),
-                                          Text(
-                                            '$visibility',
-                                            style: const TextStyle(
-                                                fontFamily: 'Libre',
-                                                fontSize: 15),
-                                          )
+                                          Column(
+                                            children: [
+                                              const Text(
+                                                'Humid',
+                                                style: TextStyle(
+                                                    fontFamily: 'Oleo',
+                                                    fontSize: 15),
+                                              ),
+                                              Text(
+                                                '$humidity',
+                                                style: const TextStyle(
+                                                    fontFamily: 'Libre',
+                                                    fontSize: 15),
+                                              )
+                                            ],
+                                          ),
+                                          Column(
+                                            children: [
+                                              const Text(
+                                                'Visibility',
+                                                style: TextStyle(
+                                                    fontFamily: 'Oleo',
+                                                    fontSize: 15),
+                                              ),
+                                              Text(
+                                                '$visibility',
+                                                style: const TextStyle(
+                                                    fontFamily: 'Libre',
+                                                    fontSize: 15),
+                                              )
+                                            ],
+                                          ),
                                         ],
                                       ),
                                     ],
-                                  )
-                                ],
+                                  ),
+                          ],
+                        ),
+                      ),
+                      temperature == null ? const SizedBox() :
+                      const DottedLine(
+                        direction: Axis.horizontal,
+                        lineLength: double.infinity,
+                        lineThickness: 1.0,
+                        dashLength: 3.0,
+                        dashColor: Colors.black,
+                        dashRadius: 0.0,
+                        dashGapLength: 4.0,
+                        dashGapColor: Colors.transparent,
+                        dashGapRadius: 0.0,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical:8.0),
+                        child: Text(
+                          cityname == null ? '' : ' Forcast for next 10 days ',
+                          style:
+                              const TextStyle(fontFamily: 'Libre', fontSize: 15),
+                        ),
+                      ),
+                      temperature == null
+                          ? const SizedBox()
+                          : SizedBox(
+                              width: double.infinity,
+                              height: MediaQuery.of(context).size.height * 0.35,
+                              child: ListView.builder(
+                                scrollDirection: Axis.vertical,
+                                itemCount: day.length,
+                                itemBuilder: (context, index) {
+                                  high = day[index].high;
+                                  var high_end =
+                                      ((high - 32) * 5 / 9).toString();
+                                  low = day[index].low;
+                                  var low_end = ((low - 32) * 5 / 9).toString();
+                                  return ListTile(
+                                    leading: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 6),
+                                      child: Text(
+                                        "${day[index].day}",
+                                      ),
+                                    ),
+                                    subtitle: Container(
+                                      width: 20.0,
+                                      height: 20,
+                                      decoration: BoxDecoration(
+                                        image: DecorationImage(
+                                          image:
+                                              AssetImage('images/$image.png'),
+                                        ),
+                                        borderRadius:
+                                            BorderRadius.circular(80.0),
+                                      ),
+                                    ),
+                                    trailing: Text(
+                                      "${double.parse(high_end).toStringAsFixed(0)}°",
+                                      style:
+                                          const TextStyle(color: Colors.black),
+                                    ),
+                                  );
+                                },
                               ),
-                      ],
-                    ),
-            ),
+                            )
+                    ],
+                  ),
           ),
         ));
   }
