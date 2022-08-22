@@ -256,124 +256,126 @@ class _MyHomePageState extends State<MyHomePage> {
                   ? const Center(child: CircularProgressIndicator())
                   : Column(
                       children: [
-                        Container(
-                          height: MediaQuery.of(context).size.height * 0.46,
-                          width: MediaQuery.of(context).size.width,
-                          child: Column(
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Icon(
-                                        Icons.location_on,
-                                        size: 18,
-                                        color: temperature == null
-                                            ? Colors.white
-                                            : Colors.black,
-                                      ),
-                                      const SizedBox(
-                                        width: 2,
-                                      ),
-                                      Text(cityname == null ? '' : '$cityname',
-                                          style: const TextStyle(
-                                            fontFamily: 'Libre',
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 18,
-                                          )),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              temperature == null
-                                  ? const CircularProgressIndicator()
-                                  : Column(
+                        SizedBox(
+                          child: Container(
+                            height: MediaQuery.of(context).size.height * 0.46,
+                            width: MediaQuery.of(context).size.width,
+                            child: Column(
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Row(
                                       children: [
-                                        Container(
-                                          height: 200,
-                                          width: 200,
-                                          decoration: BoxDecoration(
-                                            image: DecorationImage(
-                                                image: AssetImage(
-                                                    'images/$image.png')),
-                                          ),
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Text(
-                                            '$skycondition',
-                                            textAlign: TextAlign.center,
-                                            style: const TextStyle(
-                                              fontFamily: 'Libre',
-                                              // fontWeight: FontWeight.bold,
-                                              fontSize: 30,
-                                            ),
-                                          ),
+                                        Icon(
+                                          Icons.location_on,
+                                          size: 18,
+                                          color: temperature == null
+                                              ? Colors.white
+                                              : Colors.black,
                                         ),
                                         const SizedBox(
-                                          height: 10,
+                                          width: 2,
                                         ),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceAround,
-                                          children: [
-                                            Column(
-                                              children: [
-                                                const Text(
-                                                  'Temp',
-                                                  style: TextStyle(
-                                                      fontFamily: 'Oleo',
-                                                      fontSize: 15),
-                                                ),
-                                                Text(
-                                                  '$temperature',
-                                                  style: const TextStyle(
-                                                      fontFamily: 'Libre',
-                                                      fontSize: 15),
-                                                )
-                                              ],
-                                            ),
-                                            Column(
-                                              children: [
-                                                const Text(
-                                                  'Humid',
-                                                  style: TextStyle(
-                                                      fontFamily: 'Oleo',
-                                                      fontSize: 15),
-                                                ),
-                                                Text(
-                                                  '$humidity',
-                                                  style: const TextStyle(
-                                                      fontFamily: 'Libre',
-                                                      fontSize: 15),
-                                                )
-                                              ],
-                                            ),
-                                            Column(
-                                              children: [
-                                                const Text(
-                                                  'Visibility',
-                                                  style: TextStyle(
-                                                      fontFamily: 'Oleo',
-                                                      fontSize: 15),
-                                                ),
-                                                Text(
-                                                  '$visibility',
-                                                  style: const TextStyle(
-                                                      fontFamily: 'Libre',
-                                                      fontSize: 15),
-                                                )
-                                              ],
-                                            ),
-                                          ],
-                                        ),
+                                        Text(cityname == null ? '' : '$cityname',
+                                            style: const TextStyle(
+                                              fontFamily: 'Libre',
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 18,
+                                            )),
                                       ],
                                     ),
-                            ],
+                                  ],
+                                ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                temperature == null
+                                    ? const CircularProgressIndicator()
+                                    : Column(
+                                        children: [
+                                          Container(
+                                            height: 200,
+                                            width: 200,
+                                            decoration: BoxDecoration(
+                                              image: DecorationImage(
+                                                  image: AssetImage(
+                                                      'images/$image.png')),
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Text(
+                                              '$skycondition',
+                                              textAlign: TextAlign.center,
+                                              style: const TextStyle(
+                                                fontFamily: 'Libre',
+                                                // fontWeight: FontWeight.bold,
+                                                fontSize: 30,
+                                              ),
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            height: 10,
+                                          ),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceAround,
+                                            children: [
+                                              Column(
+                                                children: [
+                                                  const Text(
+                                                    'Temp',
+                                                    style: TextStyle(
+                                                        fontFamily: 'Oleo',
+                                                        fontSize: 15),
+                                                  ),
+                                                  Text(
+                                                    '$temperature',
+                                                    style: const TextStyle(
+                                                        fontFamily: 'Libre',
+                                                        fontSize: 15),
+                                                  )
+                                                ],
+                                              ),
+                                              Column(
+                                                children: [
+                                                  const Text(
+                                                    'Humid',
+                                                    style: TextStyle(
+                                                        fontFamily: 'Oleo',
+                                                        fontSize: 15),
+                                                  ),
+                                                  Text(
+                                                    '$humidity',
+                                                    style: const TextStyle(
+                                                        fontFamily: 'Libre',
+                                                        fontSize: 15),
+                                                  )
+                                                ],
+                                              ),
+                                              Column(
+                                                children: [
+                                                  const Text(
+                                                    'Visibility',
+                                                    style: TextStyle(
+                                                        fontFamily: 'Oleo',
+                                                        fontSize: 15),
+                                                  ),
+                                                  Text(
+                                                    '$visibility',
+                                                    style: const TextStyle(
+                                                        fontFamily: 'Libre',
+                                                        fontSize: 15),
+                                                  )
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                              ],
+                            ),
                           ),
                         ),
                         temperature == null ? const SizedBox() :
@@ -411,16 +413,19 @@ class _MyHomePageState extends State<MyHomePage> {
                                     low = day[index].low;
                                     var low_end = ((low - 32) * 5 / 9).toString();
                                     return ListTile(
-                                      leading: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 6),
-                                        child: Text(
-                                          "${day[index].day}",
+                                      leading: SizedBox(
+                                        height: 40,
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(top: 20.0),
+                                          child: Text(
+                                            "${day[index].day}",
+                                          ),
                                         ),
                                       ),
                                       subtitle: Container(
+
                                         width: 20.0,
-                                        height: 20,
+                                        height: 40,
                                         decoration: BoxDecoration(
                                           image: DecorationImage(
                                             image:
@@ -430,10 +435,16 @@ class _MyHomePageState extends State<MyHomePage> {
                                               BorderRadius.circular(80.0),
                                         ),
                                       ),
-                                      trailing: Text(
-                                        "${double.parse(high_end).toStringAsFixed(0)}°",
-                                        style:
-                                            const TextStyle(color: Colors.black),
+                                      trailing: SizedBox(
+                                        height: 40,
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(top: 20),
+                                          child: Text(
+                                            "${double.parse(high_end).toStringAsFixed(0)}°",
+                                            style:
+                                                const TextStyle(color: Colors.black),
+                                          ),
+                                        ),
                                       ),
                                     );
                                   },
